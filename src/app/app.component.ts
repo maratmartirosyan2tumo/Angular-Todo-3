@@ -12,4 +12,6 @@ import {TodoListComponent} from "./components/todo-list/todo-list.component";
 })
 export class AppComponent {
   title = 'Todo-App';
+
+  constructor(private _router: RouterOutlet) {}
 }
