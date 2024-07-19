@@ -18,7 +18,17 @@ export class TodoListComponent {
   constructor(private todoService: TodoService) {
   }
 
-  ngOnInit() {
+  ngOnInit() { // works after constructor
+    this.fetchTodos()
+  }
+
+  onAdd(value: string){
+    const todo = new Todo('-1', value, false);
+    const newTodo = this.todoService.create(todo);
+    this.todos.push(newTodo);
+  }
+
+  fetchTodos(){
     this.todos = this.todoService.getAll()
   }
 }
