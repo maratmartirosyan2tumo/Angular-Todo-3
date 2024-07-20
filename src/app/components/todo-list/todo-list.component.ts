@@ -28,6 +28,16 @@ export class TodoListComponent {
     this.todos.push(newTodo);
   }
 
+  onDelete(id: string) {
+    if(confirm('Are you sure?')){
+      const deletedId = this.todoService.delete(id);
+      if (deletedId) {
+        const index = this.todos.findIndex(value => value.id === deletedId);
+        this.todos.splice(index, 1);
+      }
+    }
+  }
+
   fetchTodos(){
     this.todos = this.todoService.getAll()
   }
