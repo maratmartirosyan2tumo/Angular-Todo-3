@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NgForOf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {Todo} from "../../models/todo";
 import {TodoService} from "../../services/todo.service";
 
@@ -7,7 +7,9 @@ import {TodoService} from "../../services/todo.service";
   selector: 'app-todo-list',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    NgClass,
+    NgIf
   ],
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.css'
@@ -40,5 +42,25 @@ export class TodoListComponent {
 
   fetchTodos(){
     this.todos = this.todoService.getAll()
+  }
+
+  onEdit(todo: Todo) {
+    todo.isEditing = true;
+  }
+
+  onSave(todo: Todo, newTitle: string) {
+    todo.isEditing = false;
+    todo.title = newTitle;
+    const updatedTodo = this.todoService.update(todo);
+    if(updatedTodo){
+      const index = this.todos.findIndex(value => value.id === updatedTodo.id);
+      this.todos[index] = {...updatedTodo};
+    }
+  }
+
+  onCancel(todo: Todo) {
+    todo.isEditing = false;
+    const index = this.todos.findIndex(value => value.id === todo.id);
+    this.todos[index] = {...this.todos[index]}
   }
 }

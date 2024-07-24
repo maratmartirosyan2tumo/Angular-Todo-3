@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Todo} from "../models/todo";
 
 @Injectable({
@@ -30,5 +30,8 @@ export class TodoService {
   }
 
   update(todo: Todo)  {
+    const index = this.todos.findIndex(value => value.id === todo.id);
+    this.todos[index] = {...todo};
+    return this.todos[index];
   }
 }
