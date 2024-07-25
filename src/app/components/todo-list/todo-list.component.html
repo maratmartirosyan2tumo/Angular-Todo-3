@@ -1,31 +1,36 @@
 <div class="container-sm border border-secondary-subtle mt-4 p-3">
 
   <div class="input-group mb-3">
-    <input #inputElement type="text" class="form-control" placeholder="Add Todo" aria-label="Recipient's username"
+    <input #inputElement type="text"
+           (keyup.enter) = "onAdd(inputElement);"
+           class="form-control"
+           placeholder="Add Todo"
+           aria-label="Recipient's username"
            aria-describedby="button-addon2">
-    <button (click)="onAdd(inputElement.value)" class="btn btn-outline-secondary" type="button" id="button-addon2">Add
+    <button (click)="onAdd(inputElement)" class="btn btn-outline-secondary" type="button" id="button-addon2">Add
     </button>
   </div>
   <hr>
   <h5>Todo items</h5>
-  <ul class="list-group">
-    <li *ngFor="let todo of todos" class="list-group-item d-flex justify-content-between">
-      <div>
-        <input class="form-check-input me-2" type="checkbox" value="">
-        <input class="form-check-label"
-               #todoTitleInput
-               [ngClass]="{'todo-title--readonly' : !todo.isEditing}"
-               [readonly]="!todo.isEditing"
-               [value]="todo.title"/>
-      </div>
-      <div *ngIf="!todo.isEditing" class="action-container">
-        <i class="bi bi-pencil me-2 edit-icon" (click)="onEdit(todo)"></i>
-        <i class="bi bi-trash delete-icon" (click)="onDelete(todo.id)"></i>
-      </div>
-      <div *ngIf="todo.isEditing" class="action-container">
-        <i class="bi bi-floppy me-2 save-icon" (click)="onSave(todo, todoTitleInput.value)"></i>
-        <i class="bi bi-x-octagon-fill  cancel-icon" (click)="onCancel(todo)"></i>
-      </div>
-    </li>
-  </ul>
+    <ul class="list-group  todo-items__container">
+      <li *ngFor="let todo of todos" class="list-group-item d-flex justify-content-between">
+        <div class="w-75">
+          <input class="form-check-input me-2" type="checkbox"  [(ngModel)]="todo.done" (ngModelChange)="updateTodo(todo)">
+          <input class="form-check-label w-75"
+                 #todoTitleInput
+                 [ngClass]="{'todo-title--readonly' : !todo.isEditing}"
+                 [readonly]="!todo.isEditing"
+                 [value]="todo.title"/>
+        </div>
+        <div *ngIf="!todo.isEditing" class="action-container">
+          <i class="bi bi-pencil me-2 edit-icon"  (click)="onEdit(todo)"></i>
+          <i class="bi bi-trash delete-icon" (click)="onDelete(todo.id)"></i>
+        </div>
+        <div *ngIf="todo.isEditing" class="action-container">
+          <i class="bi bi-floppy me-2 save-icon" (click)="onSave(todo, todoTitleInput.value)"></i>
+          <i class="bi bi-x-octagon-fill  cancel-icon" (click)="onCancel(todo)"></i>
+        </div>
+      </li>
+    </ul>
+
 </div>

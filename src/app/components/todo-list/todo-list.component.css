@@ -2,3 +2,8 @@
   border: none;
   outline: none;
 }
+
+.todo-items__container{
+  max-height: calc(100vh - 225px);
+  overflow-y: auto;
+}

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {Todo} from "../../models/todo";
 import {TodoService} from "../../services/todo.service";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-todo-list',
@@ -9,13 +10,15 @@ import {TodoService} from "../../services/todo.service";
   imports: [
     NgForOf,
     NgClass,
-    NgIf
+    NgIf,
+    FormsModule
   ],
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.css'
 })
 export class TodoListComponent {
   todos: Todo[] = [];
+  ongoingEditing = false;
 
   constructor(private todoService: TodoService) {
   }
@@ -24,10 +27,15 @@ export class TodoListComponent {
     this.fetchTodos()
   }
 
-  onAdd(value: string){
+  onAdd(inputElement: HTMLInputElement){
+    const value = inputElement.value;
+    if (!value){
+      return
+    }
     const todo = new Todo('-1', value, false);
     const newTodo = this.todoService.create(todo);
-    this.todos.push(newTodo);
+    this.todos.unshift(newTodo);
+    inputElement.value = '';
   }
 
   onDelete(id: string) {
@@ -45,22 +53,31 @@ export class TodoListComponent {
   }
 
   onEdit(todo: Todo) {
+    if(this.ongoingEditing){return}
+    this.ongoingEditing = true;
     todo.isEditing = true;
   }
 
   onSave(todo: Todo, newTitle: string) {
     todo.isEditing = false;
     todo.title = newTitle;
-    const updatedTodo = this.todoService.update(todo);
-    if(updatedTodo){
-      const index = this.todos.findIndex(value => value.id === updatedTodo.id);
-      this.todos[index] = {...updatedTodo};
-    }
+    this.updateTodo(todo)
+    this.ongoingEditing = false;
   }
+
 
   onCancel(todo: Todo) {
     todo.isEditing = false;
     const index = this.todos.findIndex(value => value.id === todo.id);
     this.todos[index] = {...this.todos[index]}
+    this.ongoingEditing = false;
+  }
+
+  updateTodo(todo: Todo) {
+    const updatedTodo = this.todoService.update(todo);
+    if(updatedTodo){
+      const index = this.todos.findIndex(value => value.id === updatedTodo.id);
+      this.todos[index] = {...updatedTodo};
+    }
   }
 }

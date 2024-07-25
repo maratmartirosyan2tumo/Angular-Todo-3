@@ -5,33 +5,37 @@ import {Todo} from "../models/todo";
   providedIn: 'root'
 })
 export class TodoService {
-  private todos = [
-    new Todo( '1', 'Go to Gym', false),
-    new Todo( '2', 'Go to Gym', false),
-    new Todo( '3', 'Go to Gym', false),
-  ];
+  todos: Todo[] = [];
 
-  getAll(){
-    return [...this.todos]
+  getAll(): Todo[] {
+    this.todos = JSON.parse(localStorage.getItem('todo-items') || '[]') as Todo[]
+    return [...this.todos];
   }
 
   create(todo: Todo): Todo {
     const uniqueId = new Date().getTime().toString();
     const updatedTodo: Todo = {...todo, id: uniqueId};
-    this.todos.push(updatedTodo);
+    this.todos.unshift(updatedTodo);
+    this.setAll(this.todos);
     return updatedTodo;
   }
 
   delete(id: string): string {
     const index = this.todos.findIndex(value => value.id === id);
-    const toDelete = this.todos[index]
+    const toDelete = this.todos[index];
     this.todos.splice(index, 1);
+    this.setAll(this.todos);
     return toDelete.id;
   }
 
-  update(todo: Todo)  {
+  update(todo: Todo): Todo {
     const index = this.todos.findIndex(value => value.id === todo.id);
     this.todos[index] = {...todo};
+    this.setAll(this.todos);
     return this.todos[index];
+  }
+
+  private setAll(todos: Todo[]): void {
+    localStorage.setItem('todo-items', JSON.stringify(todos));
   }
 }
