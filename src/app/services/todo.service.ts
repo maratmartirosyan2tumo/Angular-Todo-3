@@ -38,4 +38,9 @@ export class TodoService {
   private setAll(todos: Todo[]): void {
     localStorage.setItem('todo-items', JSON.stringify(todos));
   }
+
+  deleteAll() {
+    this.todos = [];
+    this.setAll(this.todos);
+  }
 }

@@ -9,16 +9,18 @@
            aria-describedby="button-addon2">
     <button (click)="onAdd(inputElement)" class="btn btn-outline-secondary" type="button" id="button-addon2">Add
     </button>
+    <button (click)="onDeleteAll(inputElement)" class="btn btn-outline-secondary" type="button">Delete All
+    </button>
   </div>
   <hr>
   <h5>Todo items</h5>
     <ul class="list-group  todo-items__container">
-      <li *ngFor="let todo of todos" class="list-group-item d-flex justify-content-between">
+      <li [ngClass]="{'done' : todo.done}" *ngFor="let todo of todos" class="list-group-item d-flex justify-content-between">
         <div class="w-75">
           <input class="form-check-input me-2" type="checkbox"  [(ngModel)]="todo.done" (ngModelChange)="updateTodo(todo)">
           <input class="form-check-label w-75"
                  #todoTitleInput
-                 [ngClass]="{'todo-title--readonly' : !todo.isEditing}"
+                 [ngClass]="{'todo-title--readonly' : !todo.isEditing,'done' : todo.done}"
                  [readonly]="!todo.isEditing"
                  [value]="todo.title"/>
         </div>

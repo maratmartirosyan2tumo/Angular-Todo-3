@@ -7,3 +7,8 @@
   max-height: calc(100vh - 225px);
   overflow-y: auto;
 }
+
+.done{
+  background-color: rgb(58, 229, 14);
+}
+

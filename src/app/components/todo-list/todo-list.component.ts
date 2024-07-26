@@ -3,6 +3,7 @@ import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {Todo} from "../../models/todo";
 import {TodoService} from "../../services/todo.service";
 import {FormsModule} from "@angular/forms";
+import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-todo-list',
@@ -14,7 +15,7 @@ import {FormsModule} from "@angular/forms";
     FormsModule
   ],
   templateUrl: './todo-list.component.html',
-  styleUrl: './todo-list.component.css'
+  styleUrl: './todo-list.component.css',
 })
 export class TodoListComponent {
   todos: Todo[] = [];
@@ -79,5 +80,10 @@ export class TodoListComponent {
       const index = this.todos.findIndex(value => value.id === updatedTodo.id);
       this.todos[index] = {...updatedTodo};
     }
+  }
+
+  onDeleteAll(inputElement: HTMLInputElement) {
+    this.todos = [];
+    this.todoService.deleteAll();
   }
 }
